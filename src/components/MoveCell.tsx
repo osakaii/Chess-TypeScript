@@ -23,7 +23,7 @@ const MoveCell = (props: Props) => {
             posY={position.y}
             onClick={() => movePiece(position)}
         >
-            <GreenCircle></GreenCircle>
+            <GreenCircle/>
         </PosMove>
     );
 };

@@ -6,12 +6,12 @@ import { useState } from "react";
 import Empty from "../components/Empty";
 import MoveCell from "../components/MoveCell";
 import MoveSound from "../assets/sounds/Move.mp3";
-import { position } from "../globaltypes";
+import { boardMatrix, position } from "../globaltypes";
 
 type Props = {};
 
 const MainPage = (props: Props) => {
-    const [boardMatrix, setBoardMatrix] = useState(
+    const [boardMatrix, setBoardMatrix] = useState<boardMatrix>(
         gameProps.sizes.startBoardMatrix
     );
 

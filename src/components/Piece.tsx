@@ -1,12 +1,13 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import gameProps from "../utils/gameProps";
-import { position } from "../globaltypes";
+import { boardMatrix, position } from "../globaltypes";
+import { rookMove, pawnMove } from "../utils/movesLogic";
 
 type Props = {
     name: string;
     currentPiece: position;
-    boardMatrix: string[][];
+    boardMatrix: boardMatrix;
     setPossibleMoves: Dispatch<SetStateAction<position[]>>;
     setCurrentPiece: Dispatch<SetStateAction<position | null>>;
     position: {
@@ -25,37 +26,20 @@ const Piece = (props: Props) => {
         position,
     } = props;
 
-    const pawnMove = () => {
-        if (position.y === 0){
-          setPossibleMoves([])
-          return
-        };
-        let tempMoves = [];
-        if (
-            boardMatrix[position.y - 1][position.x - 1] !== "e" &&
-            position.x !== 0
-        ) {
-            tempMoves.push({ x: position.x - 1, y: position.y - 1 });
-        }
-        if (
-            boardMatrix[position.y - 1][position.x + 1] !== "e" &&
-            position.x !== 7
-        ) {
-            tempMoves.push({ x: position.x + 1, y: position.y - 1 });
-        }
-        if (boardMatrix[position.y - 1][position.x] === "e") {
-            tempMoves.push({ x: position.x, y: position.y - 1 });
-        }
-        setPossibleMoves(tempMoves);
+ 
+
+    const calcMoves = (): void => {
+      switch(name){
+        case 'wP':
+          setPossibleMoves(pawnMove(position, boardMatrix));
+          break
+        case 'wR':
+          setPossibleMoves(rookMove(position, boardMatrix));
+          break
+      }
     };
 
-    const calcMoves = () => {
-            pawnMove();
-            return;
-    };
-
-    const handleClick = () => {
-
+    const handleClick = (): void => {
         if (
             JSON.stringify(currentPiece) !== JSON.stringify(position) ||
             !position
