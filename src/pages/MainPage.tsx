@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import gameProps from "../utils/gameProps";
 import GameFieldTexture from "../components/GameFieldTexture";
-import Piece from "../components/Piece";
+import Piece from "../components/Piece/Piece";
 import { useState } from "react";
 import Empty from "../components/Empty";
 import MoveCell from "../components/MoveCell";

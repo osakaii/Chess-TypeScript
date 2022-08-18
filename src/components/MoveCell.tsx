@@ -38,13 +38,15 @@ const PosMove = styled.div<ShadowedProps>`
     z-index: 4;
     left: ${(props) => props.posX * gameProps.sizes.CellWidth}px;
     top: ${(props) => props.posY * gameProps.sizes.CellWidth}px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const GreenCircle = styled.span`
     position: absolute;
-    width: 50%;
-    height: 50%;
-    background-color: red;
+    width: 40%;
+    height: 40%;
+    background-color: #ff3333;
     border-radius: 50%;
-    transform: translate(50%, 50%);
 `;
