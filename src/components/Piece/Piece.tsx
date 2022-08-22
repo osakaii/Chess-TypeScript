@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
-import { boardMatrix, position } from "../../globaltypes";
-import { getMoves } from "../../utils/movesLogic";
+import { boardMatrix, position } from "~/globaltypes";
+import { getMoves } from "~/utils/movesLogic";
 import { PieceDiv } from "./style";
 
 type Props = {
