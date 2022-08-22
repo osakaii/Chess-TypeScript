@@ -1,15 +1,10 @@
 import styled from "styled-components";
-import { position } from "../globaltypes";
+import { position, ShadowedProps } from "../globaltypes";
 import gameProps from "../utils/gameProps";
 
 type Props = {
   position: position;
 };
-
-interface ShadowedProps {
-  posX: number;
-  posY: number;
-}
 
 const Empty = ({position}: Props) => {
   return <EmptyDiv posX={position.x} posY={position.y}></EmptyDiv>;

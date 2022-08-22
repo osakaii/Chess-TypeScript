@@ -1,22 +1,24 @@
 import { Dispatch, SetStateAction } from "react";
-import { boardMatrix, position } from "~/globaltypes";
+import { position } from "~/globaltypes";
+import { useAppSelector } from "~/store/redux";
 import { getMoves } from "~/utils/movesLogic";
 import { PieceDiv } from "./style";
 
 type Props = {
     name: string;
     currentPiece: position;
-    boardMatrix: boardMatrix;
     setPossibleMoves: Dispatch<SetStateAction<position[]>>;
     setCurrentPiece: Dispatch<SetStateAction<position | null>>;
     position: position;
 };
 
 const Piece = (props: Props) => {
-    const { name, currentPiece, boardMatrix, setPossibleMoves, setCurrentPiece, position } = props;
+    const { name, currentPiece, setPossibleMoves, setCurrentPiece, position } = props;
+
+    const {board} = useAppSelector(state => state.gameReducer)
 
     const calcMoves = (): void => {
-        setPossibleMoves(getMoves(position, boardMatrix, name));
+        setPossibleMoves(getMoves(position, board, name));
     };
 
     const handleClick = (): void => {
