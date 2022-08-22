@@ -9,10 +9,7 @@ type Props = {
     boardMatrix: boardMatrix;
     setPossibleMoves: Dispatch<SetStateAction<position[]>>;
     setCurrentPiece: Dispatch<SetStateAction<position | null>>;
-    position: {
-        x: number;
-        y: number;
-    };
+    position: position;
 };
 
 const Piece = (props: Props) => {

@@ -6,14 +6,14 @@ const gameProps = {
         boardSize: 8 * 8,
         cellsArray:  Array.from(Array(64).keys()),
         startBoardMatrix: [
-            ["bR", "bK", "bB", "bQ", "bKi", "bB", "bK", "bR"],
-            ["e", "bP", "bP", "e", "e", "bP", "bP", "e"],
+            ["bR", "bKn", "bB", "bQ", "bKi", "bB", "bKn", "bR"],
+            ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
             ["e", "e", "e", "e", "e", "e", "e", "e"],
             ["e", "e", "e", "e", "e", "e", "e", "e"],
             ["e", "e", "e", "e", "e", "e", "e", "e"],
             ["e", "e", "e", "e", "e", "e", "e", "e"],
-            ["e", "wP", "wP", "e", "e", "wP", "wP", "e"],
-            ["wR", "wK", "wB", "wQ", "wKi", "wB", "wK", "wR"],
+            ["wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
+            ["wR", "wKn", "wB", "wQ", "wKi", "wB", "wKn", "wR"],
           ],
     },
     colors: {

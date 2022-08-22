@@ -40,7 +40,7 @@ const MainPage = (props: Props) => {
 
     return (
         <MainPageDiv>
-            <Title>Chess</Title>
+            {/* <Title>Chess</Title> */}
             <GameFieldWrapper>
                 <GameFieldTexture />
                 <GameField>
@@ -98,6 +98,7 @@ export default MainPage;
 const MainPageDiv = styled.div`
     min-height: 100vh;
     width: 100%;
+    background-color: #fff0dc;
     display: flex;
     justify-content: center;
     align-items: center;

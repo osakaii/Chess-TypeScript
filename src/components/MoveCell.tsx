@@ -45,8 +45,8 @@ const PosMove = styled.div<ShadowedProps>`
 
 const GreenCircle = styled.span`
     position: absolute;
-    width: 40%;
-    height: 40%;
-    background-color: #ff3333;
+    width: 35%;
+    height: 35%;
+    background-color: #ff6e13;
     border-radius: 50%;
 `;
