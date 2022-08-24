@@ -1,9 +1,7 @@
-import { Dispatch, SetStateAction } from "react";
 import { useAppDispatch, useAppSelector } from '~/store/redux';
-import { move, position } from "~/globaltypes";
+import { move } from "~/globaltypes";
 import { gameSlice } from "~/store/reducers/GameSlice";
 
-import { currentPiece } from "~/pages/MainPage/MainPage";
 import MoveSound from "~/assets/sounds/Move.mp3";
 import { GreenCircle, PosMove } from './style';
 

@@ -1,5 +1,14 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import gameProps from "~/utils/gameProps";
+
+const alert = keyframes`
+    from{
+        transform: translateY(100px);
+    }
+    to{
+        transform: translateY(0);
+    }
+`
 
 export const MainPageDiv = styled.div`
     min-height: 100vh;
@@ -24,8 +33,12 @@ export const GameField = styled.div`
     z-index: 3;
 `;
 
-export const Title = styled.h1`
-    color: ${gameProps.colors.brownFont};
+export const Check = styled.h1`
+    position: absolute;
+    top: 10%;
+    font-size: 42px;
+    color: #C80000;
+    animation: ${alert} .5s linear 1;
 `;
 
 export const PosMoves = styled.div`
@@ -34,3 +47,4 @@ export const PosMoves = styled.div`
     position: absolute;
     z-index: 3;
 `;
+

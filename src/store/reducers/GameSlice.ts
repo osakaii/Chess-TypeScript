@@ -1,9 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { boardMatrix, move, position } from "~/globaltypes";
-import { currentPiece } from "~/pages/MainPage/MainPage";
 import gameProps from "~/utils/gameProps";
 import { getMoves } from "~/utils/movesLogic";
+
+type currentPiece = {
+    x: number;
+    y: number;
+    name: string;
+};
 
 type movePieceAction = PayloadAction<{
     from: currentPiece;
@@ -20,12 +25,12 @@ export type castles = {
 };
 
 type curPiece = {
-    x: number,
-    y: number,
-    name: string,
-    id: string,
-    isShow: boolean
-}
+    x: number;
+    y: number;
+    name: string;
+    id: string;
+    isShow: boolean;
+};
 
 interface GameState {
     board: boardMatrix;
@@ -33,6 +38,8 @@ interface GameState {
     turn: string;
     curPiece: curPiece;
     castles: castles;
+    wCheck: boolean,
+    bCheck: boolean
 }
 
 const initialState: GameState = {
@@ -44,7 +51,7 @@ const initialState: GameState = {
         y: 0,
         name: "",
         id: "",
-        isShow: false
+        isShow: false,
     },
     castles: {
         white00: true,
@@ -52,6 +59,8 @@ const initialState: GameState = {
         black00: true,
         black000: true,
     },
+    wCheck: false,
+    bCheck: false
 };
 
 export const gameSlice = createSlice({
@@ -84,21 +93,41 @@ export const gameSlice = createSlice({
         },
 
         calcPiecesMoves(state) {
-            state.piecesMoves = state.board.map((row, indexY) =>
-                row.map((piece, indexX) => piece === "e" ? null : getMoves({ x: indexX, y: indexY }, state.board, piece, state.castles))
+            
+            let noChecks = true
+
+            let tempMoves = []
+
+            state.piecesMoves = state.board.map((row, y) =>
+                row.map((piece, x) => {
+
+                    if( piece !== "e"){}
+                   let moves = getMoves({ x, y }, state.board, piece, state.castles)
+                   
+                   moves.forEach((el: move, index: number) => {
+                        const cell = state.board[el.y][el.x]
+                        if(cell.includes('Ki')){
+                            cell[0] === 'w' ? state.wCheck = true : state.bCheck = true
+                        }
+                   });
+
+                   return piece === "e" ? null : moves
+                })
             );
+
+            noChecks? state.wCheck = state.bCheck = false : null
         },
 
         swapTurn(state) {
             state.turn = state.turn === "w" ? "b" : "w";
         },
 
-        setCurPiece(state, action: PayloadAction<curPiece>){
-            state.curPiece = action.payload
+        setCurPiece(state, action: PayloadAction<curPiece>) {
+            state.curPiece = action.payload;
         },
 
-        toggleShow(state){
-            state.curPiece.isShow = !state.curPiece.isShow
+        toggleShow(state) {
+            state.curPiece.isShow = !state.curPiece.isShow;
         },
 
         castle(state, action: PayloadAction<keyof castles>) {
@@ -110,16 +139,16 @@ export const gameSlice = createSlice({
 
             switch (action.payload) {
                 case "white00":
-                    castleMove(7, 6, 5, 4, 7, "wKi", "wR");
+                    castleMove(7, 5, 6, 4, 7, "wKi", "wR");
                     break;
                 case "white000":
-                    castleMove(7, 2, 3, 4, 0, "wKi", "wR");
+                    castleMove(7, 3, 2, 4, 0, "wKi", "wR");
                     break;
                 case "black00":
-                    castleMove(0, 6, 5, 4, 7, "bKi", "bR");
+                    castleMove(0, 5, 6, 4, 7, "bKi", "bR");
                     break;
                 case "black000":
-                    castleMove(0, 2, 3, 4, 0, "bKi", "bR");
+                    castleMove(0, 3, 2, 4, 0, "bKi", "bR");
                     break;
             }
 
