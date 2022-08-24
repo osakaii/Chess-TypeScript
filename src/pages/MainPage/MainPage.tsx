@@ -1,19 +1,35 @@
-import { useState } from "react";
-import { useAppSelector, useAppDispatch } from "~/store/redux";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "~/store/redux";
+import { move, position } from "~/globaltypes";
+
 import Piece from "~/components/Piece";
 import Empty from "~/components/Empty";
 import MoveCell from "~/components/MoveCell";
-import { position } from "~/globaltypes";
-import { GameField, GameFieldWrapper, MainPageDiv, PosMoves } from "./style";
 import GameFieldTexture from "~/components/GameFieldTexture";
+
+import { GameField, GameFieldWrapper, MainPageDiv, PosMoves } from "./style";
+import { gameSlice } from "~/store/reducers/GameSlice";
+
+export type currentPiece = {
+    x: number,
+    y: number,
+    name: string
+}
 
 type Props = {};
 
 const MainPage = (props: Props) => {
-    const [possibleMoves, setPossibleMoves] = useState<position[]>([]);
-    const [currentPiece, setCurrentPiece] = useState<position | null>(null);
+    const [possibleMoves, setPossibleMoves] = useState<move[]>([]);
+    const [currentPiece, setCurrentPiece] = useState<currentPiece | null>(null);
+
+    const dispatch = useAppDispatch()
     
-    const {board} = useAppSelector(state => state.gameReducer)
+    const {board, piecesMoves, curPiece} = useAppSelector(state => state.gameReducer)
+    const {calcPiecesMoves} = gameSlice.actions
+
+    useEffect(() => {
+        dispatch(calcPiecesMoves())
+    }, [board])
 
     return (
         <MainPageDiv>
@@ -51,16 +67,11 @@ const MainPage = (props: Props) => {
                     )}
                 </GameField>
                 <PosMoves>
-                    {currentPiece &&
-                        possibleMoves.map((cell, index) => (
+                    {curPiece.isShow &&
+                        piecesMoves[curPiece.y][curPiece.x]!.map((cell, index) => (
                             <MoveCell
-                                currentPiece={currentPiece}
-                                setCurrentPiece={setCurrentPiece}
                                 key={index}
-                                position={{
-                                    x: cell.x,
-                                    y: cell.y,
-                                }}
+                                position={cell}
                             />
                         ))}
                 </PosMoves>

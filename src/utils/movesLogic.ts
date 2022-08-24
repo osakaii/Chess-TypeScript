@@ -1,28 +1,29 @@
+
 import { boardMatrix, position } from "../globaltypes";
+import { castles } from "~/store/reducers/GameSlice";
 
 type getPos = (x: number, y: number) => string;
-type createMove = (argX: number, argY: number) => position;
 
 const MIN_EDGE = 0;
 const MAX_EDGE = 7;
 
-export const getMoves = (position: position, boardMatrix: boardMatrix, name: string) => {
+export const getMoves = (position: position, boardMatrix: boardMatrix, name: string, castles: castles) => {
     let tempMoves: any = [];
 
     const getPos: getPos = (x, y) => {
         return boardMatrix[y][x] ? boardMatrix[y][x] : "";
     };
 
-    const createMove: createMove = (argX, argY) => {
-        return { x: argX, y: argY };
+    const createMove = (x: number, y: number, castle: string = ""): { x: number, y: number, castle: string} => {
+        return { x, y, castle };
     };
 
-    const calcMoves = (x: number, y: number, limit: boolean = false) => {
+    const calcMoves = (x: number, y: number, limit: boolean = false, castle: string = '') => {
         for (let i = position.y + y, k = position.x + x; i >= MIN_EDGE && k >= MIN_EDGE && i <= MAX_EDGE && k <= MAX_EDGE; i += y, k += x) {
             if (getPos(k, i) === "e") {
-                tempMoves.push(createMove(k, i));
+                tempMoves.push(createMove(k, i, castle));
             } else if (!getPos(k, i).includes(name[0])) {
-                tempMoves.push(createMove(k, i));
+                tempMoves.push(createMove(k, i, castle));
                 break;
             } else break;
             if (limit === true) {
@@ -57,6 +58,14 @@ export const getMoves = (position: position, boardMatrix: boardMatrix, name: str
             for (let n = -1; n <= 1; n++) {
                 calcMoves(i, n, true);
             }
+        }
+        if(name[0] === 'w'){
+            if(castles.white000 && getPos(0, 7) === "wR") calcMoves(-2, 0, false, "white000")
+            if(castles.white00  && getPos(7, 7) === "wR") calcMoves(2, 0, false, "white00")
+        }
+        if(name[0] === 'b'){
+            if(castles.black000 && getPos(0, 0) === "bR") calcMoves(-2, 0, false, "black000")
+            if(castles.black00  && getPos(7, 0) === "bR") calcMoves(2, 0, false, "black00")
         }
     }
 

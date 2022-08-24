@@ -1,30 +1,35 @@
 import { Dispatch, SetStateAction } from "react";
-import { useAppDispatch } from '~/store/redux';
-import { position } from "~/globaltypes";
+import { useAppDispatch, useAppSelector } from '~/store/redux';
+import { move, position } from "~/globaltypes";
 import { gameSlice } from "~/store/reducers/GameSlice";
 
+import { currentPiece } from "~/pages/MainPage/MainPage";
 import MoveSound from "~/assets/sounds/Move.mp3";
 import { GreenCircle, PosMove } from './style';
 
 type Props = {
-    position: position;
-    currentPiece: position;
-    setCurrentPiece: Dispatch<SetStateAction<position | null>>;
+    position: move;
 };
-
-
 
 const MoveAudio = new Audio(MoveSound);
 
 const MoveCell = (props: Props) => {
-    const dispatch = useAppDispatch()
-    const {changeBoard} = gameSlice.actions
+    const { position } = props;
 
-    const { position, currentPiece, setCurrentPiece } = props;
+    const {curPiece} = useAppSelector(state => state.gameReducer)
+    const {movePiece, swapTurn, castle, toggleShow} = gameSlice.actions
+    const dispatch = useAppDispatch()
+
 
     const clickHandler = (): void => {
-        dispatch(changeBoard({from: currentPiece,to: position}))
-        setCurrentPiece(null)
+        if(position.castle){
+            dispatch(castle(position.castle))
+        }else{
+            dispatch(movePiece({from: {x: curPiece.x, y: curPiece.y, name: curPiece.name }, to: position}))
+        }
+   
+        dispatch(swapTurn())
+        dispatch(toggleShow())
         MoveAudio.play();
     }
 
