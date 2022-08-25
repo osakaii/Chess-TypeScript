@@ -52,7 +52,7 @@ const MainPage = (props: Props) => {
                 </GameField>
                 <PosMoves>
                     {
-                        curPiece.isShow && piecesMoves[curPiece.y][curPiece.x]!.map((cell, index) => 
+                        curPiece.isShow && piecesMoves[curPiece.id]!.map((cell, index) => 
                             <MoveCell key={index} position={cell} />
                         )
                     }

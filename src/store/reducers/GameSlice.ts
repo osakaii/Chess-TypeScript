@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
 
 import { boardMatrix, move, position } from "~/globaltypes";
 import gameProps from "~/utils/gameProps";
@@ -32,19 +32,23 @@ type curPiece = {
     isShow: boolean;
 };
 
+type piecesMoves = {
+    [key: string]: move[];
+};
+
 interface GameState {
     board: boardMatrix;
-    piecesMoves: move[][][] | null[][];
+    piecesMoves: piecesMoves;
     turn: string;
     curPiece: curPiece;
     castles: castles;
-    wCheck: boolean,
-    bCheck: boolean
+    wCheck: boolean;
+    bCheck: boolean;
 }
 
 const initialState: GameState = {
     board: gameProps.sizes.startBoardMatrix,
-    piecesMoves: [],
+    piecesMoves: {},
     turn: "w",
     curPiece: {
         x: 0,
@@ -60,7 +64,7 @@ const initialState: GameState = {
         black000: true,
     },
     wCheck: false,
-    bCheck: false
+    bCheck: false,
 };
 
 export const gameSlice = createSlice({
@@ -93,29 +97,44 @@ export const gameSlice = createSlice({
         },
 
         calcPiecesMoves(state) {
-            
-            let noChecks = true
+            let noChecks = true;
 
-            let tempMoves = []
+            let tempMoves: piecesMoves = {};
 
-            state.piecesMoves = state.board.map((row, y) =>
+            state.board.forEach((row, y) =>
                 row.map((piece, x) => {
+                    if (piece !== "e") {
+                        let moves = getMoves({ x, y }, state.board, piece, state.castles);
 
-                    if( piece !== "e"){}
-                   let moves = getMoves({ x, y }, state.board, piece, state.castles)
-                   
-                   moves.forEach((el: move, index: number) => {
-                        const cell = state.board[el.y][el.x]
-                        if(cell.includes('Ki')){
-                            cell[0] === 'w' ? state.wCheck = true : state.bCheck = true
+                        moves.forEach((el: move, index: number) => {
+                            const cell = state.board[el.y][el.x];
+                            if (cell.includes("Ki")) {
+                                noChecks = false;
+                                cell[0] === "w" ? (state.wCheck = true) : (state.bCheck = true);
+                            }
+                        });
+
+                        if (piece.includes("Ki")) {
+                            moves = moves.filter((el: move) => {
+                                for (let key in state.piecesMoves) {
+                                    let tempArray = state.piecesMoves[key]
+                                    for(let i = 0; i < tempArray.length; i++){
+                                        if( el.x === tempArray[i].x && el.y === tempArray[i].y && !key.includes(piece[0])){
+                                            return false
+                                        }
+                                    }
+                                }
+                                return true
+                            });
                         }
-                   });
 
-                   return piece === "e" ? null : moves
+                        tempMoves[piece + x + y] = moves;
+                    }
                 })
             );
 
-            noChecks? state.wCheck = state.bCheck = false : null
+            state.piecesMoves = tempMoves;
+            noChecks ? (state.wCheck = state.bCheck = false) : null;
         },
 
         swapTurn(state) {
