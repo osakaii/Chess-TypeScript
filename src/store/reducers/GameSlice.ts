@@ -121,7 +121,7 @@ export const gameSlice = createSlice({
             tempMoves = calcKingMoves(tempMoves, current(state.board))
 
             state.piecesMoves = tempMoves;
-            noChecks ? (state.wCheck = state.bCheck = false) : null;
+            noChecks && (state.wCheck = state.bCheck = false);
         },
 
         swapTurn(state) {
