@@ -2,6 +2,7 @@ import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
 
 import { boardMatrix, move, position } from "~/globaltypes";
 import gameProps from "~/utils/gameProps";
+import { calcKingMoves } from "~/utils/KingLogic";
 import { getMoves } from "~/utils/movesLogic";
 
 type currentPiece = {
@@ -32,7 +33,7 @@ type curPiece = {
     isShow: boolean;
 };
 
-type piecesMoves = {
+export type piecesMoves = {
     [key: string]: move[];
 };
 
@@ -105,7 +106,6 @@ export const gameSlice = createSlice({
                 row.map((piece, x) => {
                     if (piece !== "e") {
                         let moves = getMoves({ x, y }, state.board, piece, state.castles);
-
                         moves.forEach((el: move, index: number) => {
                             const cell = state.board[el.y][el.x];
                             if (cell.includes("Ki")) {
@@ -113,25 +113,12 @@ export const gameSlice = createSlice({
                                 cell[0] === "w" ? (state.wCheck = true) : (state.bCheck = true);
                             }
                         });
-
-                        if (piece.includes("Ki")) {
-                            moves = moves.filter((el: move) => {
-                                for (let key in state.piecesMoves) {
-                                    let tempArray = state.piecesMoves[key]
-                                    for(let i = 0; i < tempArray.length; i++){
-                                        if( el.x === tempArray[i].x && el.y === tempArray[i].y && !key.includes(piece[0])){
-                                            return false
-                                        }
-                                    }
-                                }
-                                return true
-                            });
-                        }
-
                         tempMoves[piece + x + y] = moves;
                     }
                 })
             );
+            
+            tempMoves = calcKingMoves(tempMoves, current(state.board))
 
             state.piecesMoves = tempMoves;
             noChecks ? (state.wCheck = state.bCheck = false) : null;

@@ -7,10 +7,10 @@ const gameProps = {
         cellsArray:  Array.from(Array(64).keys()),
         startBoardMatrix: [
             ["bR", "bKn", "bB", "bQ", "bKi", "bB", "bKn", "bR"],
-            ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
+            ["e", "bP", "bP", "e", "bP", "bP", "bP", "bP"],
             ["e", "e", "e", "e", "e", "e", "e", "e"],
-            ["e", "e", "e", "e", "e", "e", "e", "e"],
-            ["e", "e", "e", "e", "e", "e", "e", "e"],
+            ["e", "e", "e", "e", "e", "e", "e", "wQ"],
+            ["e", "e", "e", "e", "e", "e", "e", "bQ"],
             ["e", "e", "e", "e", "e", "e", "e", "e"],
             ["wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
             ["wR", "wKn", "wB", "wQ", "wKi", "wB", "wKn", "wR"],
